@@ -16,12 +16,27 @@ class BaseModel:
     other/subclasses.
     """
 
-    def __init__(self):
-        '''Initializing a new instance
+    def __init__(self, *args, **kwargs):
+        '''Initializing a new instance or creating new instances
+        with attributes from **kwargs
+
+        Args:
+            args: is not to be used
+            kwargs: a dict of attributes and values
         '''
-        self.id = str(uuid4())  #: str: A unique id for the object
-        self.created_at = datetime.now()  #: Time object was created
-        self.updated_at = self.created_at  #: Time object was updated last
+        # Check and using kwargs if None or empty
+        if kwargs:
+            for key in kwargs:
+                if key == '__class__':
+                    continue
+                elif key == 'created_at' or key == 'updated_at':
+                    kwargs[key] = datetime.fromisoformat(kwargs[key])
+                setattr(self, key, kwargs[key])
+        # If the kwargs was empty or None
+        else:
+            self.id = str(uuid4())  #: str: A unique id for the object
+            self.created_at = datetime.now()  #: Time object was created
+            self.updated_at = self.created_at  #: Time object was updated last
 
     def __str__(self):
         """Generate a string representation of the instance/object
