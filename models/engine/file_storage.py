@@ -31,8 +31,12 @@ class FileStorage:
         Args:
             obj: Reference/identifier to the object to be stored
         """
-        # Storing object with the <obj class name>.id as key
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        if isinstance(self.__objects, dict):
+            """ Check the file_name if it is a dictionary """
+            # Storing object with the <obj class name>.id as key
+            self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        else:
+            pass
 
     def save(self):
         """Serializes __objects to the JSON file(__file_path)
