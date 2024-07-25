@@ -35,6 +35,7 @@ class FileStorage:
             """ Check the file_name if it is a dictionary """
             # Storing object with the <obj class name>.id as key
             self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        # if object is not a type dictionary
         else:
             pass
 
@@ -46,11 +47,16 @@ class FileStorage:
         # Generate Serializeable dict representation of the objects
         for key in self.__objects:
             serial_dict[key] = self.__objects[key].to_dict()
-
-        # Open the file
-        with open(self.__file_path, 'w', encoding='utf-8') as Jfile:
+        
+        if isinstance(self.__file_path, str):
+            """ Check if the file_path name is a string. """
+            # Open the file
+            with open(self.__file_path, 'w', encoding='utf-8') as Jfile:
             # Now write serialize directly into the file
-            dump(serial_dict, Jfile)
+                dump(serial_dict, Jfile)
+        # if file_path is not a type string            
+        else:
+            pass
 
     def reload(self):
         """Deserialize the JSON file (__file_path) to __objects
