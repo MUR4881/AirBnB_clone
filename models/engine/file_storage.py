@@ -22,7 +22,10 @@ class FileStorage:
     def all(self):
         """Return a dictionary containing all objects
         """
-        return self.__class__.__objects
+        # Converting to an empty dict if wasn't a dict
+        if not isinstance(self.__objects, dict):
+            self.__class__.__objects = {}
+        return self.__objects
 
     def new(self, obj):
         """Sets object in to the dict of objects
@@ -31,13 +34,11 @@ class FileStorage:
         Args:
             obj: Reference/identifier to the object to be stored
         """
-        if isinstance(self.__objects, dict):
-            """ Check the file_name if it is a dictionary """
-            # Storing object with the <obj class name>.id as key
-            self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
-        # if object is not a type dictionary
-        else:
-            pass
+        # convert it to a dictionary instead if is not!
+        # That is better, since we still have to store objects
+        if not isinstance(self.__objects, dict):
+            self.__class__.__objects = {}
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         """Serializes __objects to the JSON file(__file_path)
@@ -47,22 +48,23 @@ class FileStorage:
         # Generate Serializeable dict representation of the objects
         for key in self.__objects:
             serial_dict[key] = self.__objects[key].to_dict()
-        
-        if isinstance(self.__file_path, str):
+        # Thinking of overwriting the file_path instead of skipping?
+        if isinstance(self.__file_path, str) and len(self.__file_path):
             """ Check if the file_path name is a string. """
             # Open the file
             with open(self.__file_path, 'w', encoding='utf-8') as Jfile:
             # Now write serialize directly into the file
                 dump(serial_dict, Jfile)
         # if file_path is not a type string            
-        else:
-            pass
 
     def reload(self):
         """Deserialize the JSON file (__file_path) to __objects
         only if the json file exist otherwise, do nothing,
         if the file doesn't exit, no exception should be raised
         """
+        # Just Return, if the file_path is not string or str of length zero
+        if (type(self.__file_path) is not str) or (len(self.__file_path) == 0):
+            return
         # Open the file, if it exits
         try:
             with open(self.__file_path) as file:

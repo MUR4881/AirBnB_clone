@@ -10,6 +10,7 @@ attributes and methods relating to different classes
 # Importing dependencies
 from uuid import uuid4
 from datetime import datetime
+import models
 
 
 class BaseModel:
@@ -25,7 +26,6 @@ class BaseModel:
             args: is not to be used
             kwargs: a dict of attributes and values
         '''
-        from models import storage
         # Check and using kwargs if None or empty
         if kwargs:
             for key in kwargs:
@@ -39,7 +39,7 @@ class BaseModel:
             self.id = str(uuid4())  #: str: A unique id for the object
             self.created_at = datetime.now()  #: Time object was created
             self.updated_at = self.created_at  #: Time object was updated last
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """Generate a string representation of the instance/object
@@ -52,9 +52,8 @@ class BaseModel:
         """Updates teh public instance attribute updated_at with the current
         datetime
         """
-        from models import storage
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """Generate a dictionary containing all attribute
