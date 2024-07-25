@@ -53,8 +53,8 @@ class BaseModel:
         datetime
         """
         from models import storage
-        storage.save()
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Generate a dictionary containing all attribute
