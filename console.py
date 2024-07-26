@@ -66,6 +66,37 @@ class HBNBCommand(Cmd):
             del all_object[key_object[0]]  # Index 0 holds the key
             storage.save()
 
+    def do_all(self, klass):
+        """Displays String representation of all instances
+        based on or not on the class name
+
+        Args:
+            klass: The optional class Name
+        """
+        str_list = []  # To store list of str
+        typ = None
+        length = len(klass)
+        # Prevent passing empty string to eval()
+        if length != 0:
+            try:  # Ensure class is defined
+                typ = type(eval(klass))  #: catching other type
+            except Exception:  # to prevent unneccessary transverse
+                print(Err2)
+                return  # preventing unneccessary transverse
+            finally:  # Survived eval for being a None class variable or int ?
+                # klass is defined in scope, but not a class?
+                if typ is not type:
+                    print(Err2)
+                    return
+
+        # made through as a defined class, or class not given
+        for key, obj in storage.all().items():  # list of tuples:(key,obj)
+            # Ensuring for empty string or fully defined class
+            if (length == 0) or (klass in key.split(".")):
+                str_list.append(str(obj))
+
+        print(str_list)
+
     def emptyline(self):
         "Method to return nothing if an empty line is entered"
         pass
@@ -129,6 +160,7 @@ def get_object_by_id(arg):
                 else:  # Returning key, and reference to objects
                     return (key, found_object)
     return None  # Explicitly, for clarity sake
+
 
 # ------- Error Messages ------------ #
 Err1 = "** class name  missing **"  #: str: Class name error
