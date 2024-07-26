@@ -72,6 +72,39 @@ class HBNBCommand(Cmd):
                     else:
                         print(search_object)  #: prints obj str, using __Str__
 
+    def do_destroy(self, arg):
+        """Destroys an instance, based
+        on the class name, and it id.
+
+        Args:
+            arg: string: Expects a class name, with id both seperated by space
+        """
+        args = split(arg)  #: list: list of the args
+        length = len(args)  #: int: number of args
+        if length == 0:
+            print("** class name missing **")
+        else:  # since there is either classname and/or id
+            try:
+                klass = eval(args[0])  #: getting class variable
+            except SyntaxError:  #: since the returned value was a number 'id'
+                # although this might not be expected to be handled this way
+                print("** class name missing **")
+            except NameError:
+                print("**class doesn't exist **")
+            else:  #: So the class exist!
+                if length < 2:
+                    print("** instance id missing **")
+                else:
+                    #  Get the key -> <class.id>
+                    key = ".".join(args[:2])  # Joining only 1st 2 args as key
+                    try:
+                        objects = storage.all()  # Ref to all reloaded obj
+                        del (objects[key])  # since dicts are passed by ref
+                    except KeyError:
+                        print("** no instance found **")
+                    else:
+                        storage.save()
+
     def emptyline(self):
         "Method to return nothing if an empty line is entered"
         pass
