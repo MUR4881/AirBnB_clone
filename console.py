@@ -97,6 +97,44 @@ class HBNBCommand(Cmd):
 
         print(str_list)
 
+    def do_update(self, args):
+        """Updates an instance based on it class name and id
+        by adding or updating attribute (save the changes into
+        the JSON file).
+
+        Args:
+            args: contains, class_name, UUID, attribute, value
+        """
+        key_obj = get_object_by_id(args)  # tuple: of key_and obj
+        # is the object None?
+        if key_obj is not None:
+            args = args.split()  # list: of cmdline args
+            length = len(args)  # int: the number arguments
+            if length < 4:
+                print("** value missing **")
+            elif length < 3:
+                print("** attribute name missing **")
+            else:  # attributes and values are available!
+                attribute = args[2]  #: attibute
+                value = args[3]
+                # Ensure attribute name, starts with alpa
+                if attribute[0].isalpha():  # Ensure attr name is appropriate
+                    # ensure to cast to the of value giving, str is default
+                    if value.isdigit():  # Either float or integers
+                        try:
+                            value = int(value)
+                        except ValueError:  # int() can not handle float str
+                            value = float(value)  # float() can handle int str
+                    # value casted or not, as long as attribute starts w alpa
+                    # key_obj contains tuple of key and obj,! get_obj_by_id()?
+                    obj = key_obj[1]  # Object
+                    setattr(obj, attribute, value)  # setting attributes
+                    storage.save()  # Saving changes to disk also
+                else:  # attribute doesn't start with alphabet
+                    # which, causes the attribute to be in accessibe
+                    # after it has been set. since var can start with digit
+                    print("** Attribute name will cause issues **")
+
     def emptyline(self):
         "Method to return nothing if an empty line is entered"
         pass
