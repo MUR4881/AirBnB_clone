@@ -53,9 +53,9 @@ class FileStorage:
             """ Check if the file_path name is a string. """
             # Open the file
             with open(self.__file_path, 'w', encoding='utf-8') as Jfile:
-            # Now write serialize directly into the file
+                # Now write serialize directly into the file
                 dump(serial_dict, Jfile)
-        # if file_path is not a type string            
+        # if file_path is not a type string
 
     def reload(self):
         """Deserialize the JSON file (__file_path) to __objects
