@@ -110,10 +110,10 @@ class HBNBCommand(Cmd):
         if key_obj is not None:
             args = args.split()  # list: of cmdline args
             length = len(args)  # int: the number arguments
-            if length < 4:
-                print("** value missing **")
-            elif length < 3:
+            if length < 3:
                 print("** attribute name missing **")
+            elif length < 4:
+                print("** value missing **")
             else:  # attributes and values are available!
                 attribute = args[2]  #: attibute
                 value = args[3]
