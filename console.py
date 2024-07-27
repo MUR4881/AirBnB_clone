@@ -201,7 +201,7 @@ def get_object_by_id(arg):
 
 
 # ------- Error Messages ------------ #
-Err1 = "** class name  missing **"  #: str: Class name error
+Err1 = "** class name missing **"  #: str: Class name error
 Err2 = "** class doesn't exist **"  #: str: Class definition error
 Err3 = "** instance id missing **"  #: str: Instance Id error
 Err4 = "** no instance found **"    #: str: Instance Not Found error
