@@ -24,6 +24,27 @@ class HBNBCommand(Cmd):
     """
     prompt = "(hbnb) "
 
+    def default(self, line):
+        """Handling all <class_name>.command() with default
+        Or calling back the original default
+
+        Args:
+            line: The line for which command has not been implemented
+        """
+        args = replace(line).split()
+        # swap first two: as in User.create as create User
+        klass = args[0]
+        args[0] = args[1]
+        args[1] = klass
+
+        line = " ".join(args)
+        # If command doesn't exist to handle the command
+        if f"do_{args[0]}" not in HBNBCommand.__dict__:
+            super().default(line)
+            return
+        # Run the class command
+        self.onecmd(line)
+
     def do_create(self, klass):
         """Create a new instance of a give class
         and saves it to the JSON file
@@ -31,6 +52,7 @@ class HBNBCommand(Cmd):
         Args:
             klass: The name of the class as a string
         """
+        # No Need to slip_strip args, # (klass) is same as klass; when not str
         # create the instance, remember the storage automatically reload
         # Reload, as in read everything stored in the file
         # And reload as been called in __init__.py
@@ -79,6 +101,7 @@ class HBNBCommand(Cmd):
         Args:
             klass: The optional class Name
         """
+        klass = replace(klass)  # Removing unncessary chars
         str_list = []  # To store list of str
         typ = None
         length = len(klass)
@@ -91,7 +114,7 @@ class HBNBCommand(Cmd):
                 return  # preventing unneccessary transverse
             finally:  # Survived eval for being a None class variable or int ?
                 # klass is defined in scope, but not a class?
-                if typ is not type:
+                if typ is not type and typ is not None:
                     print(Err2)
                     return
 
@@ -114,7 +137,7 @@ class HBNBCommand(Cmd):
         key_obj = get_object_by_id(args)  # tuple: of key_and obj
         # is the object None?
         if key_obj is not None:
-            args = args.split()  # list: of cmdline args
+            args = replace(args).split()  # list: of cmdline args
             length = len(args)  # int: the number arguments
             if length < 3:
                 print("** attribute name missing **")
@@ -157,16 +180,23 @@ class HBNBCommand(Cmd):
 # ----- Complementary/Supplementary Functions --------- #
 
 
-def split(arg):
-    """Split arguments into list of args
-    by using space as the defaul separator
+def replace(arg):
+    """removes '.(),'
+    by using space as the default separator
 
     Args:
         arg: The passed arguments to be separated
 
     Return: A list of the splitted.
     """
-    return arg.split()
+    # Replaces Unnecessary characters with space
+    reform_arg = ""
+    for character in arg:
+        if character in ",()\"'.":
+            character = " "  # Replacement
+        reform_arg += character
+
+    return reform_arg.strip()  # removing spaces added to ends
 
 
 def get_object_by_id(arg):
@@ -178,7 +208,7 @@ def get_object_by_id(arg):
 
     Return: Key with Reference/address to the object else None if not found
     """
-    ids = split(arg)  #: list: contains class_name, UUID, or more
+    ids = replace(arg).split()  #: list: contains class_name, UUID, or more
     length = len(ids)  #: int: number of args
     if length == 0:
         print(Err1)
