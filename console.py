@@ -160,6 +160,27 @@ class HBNBCommand(Cmd):
                     # after it has been set. since var can start with digit
                     print("** Attribute name will cause issues **")
 
+    def do_count(self, klass):
+        """Retrieves all instances/ or only of a given class
+
+        Args:
+            klass: The string/name of the class
+        """
+        count = 0  # To store list of str
+
+        # Check for class existence
+        # Returned tuple of boolean, strippedklass, klass length below
+        exists, klass, length = class_exists(klass)
+        if not exists:  # klass exists?
+            return
+        # made through as a defined class, or class not given
+        for key, obj in storage.all().items():  # list of tuples:(key,obj)
+            # Ensuring for empty string or fully defined class
+            if (length == 0) or (klass in key.split(".")):
+                count += 1
+        # Found Number of Instances
+        print(count)
+
     def emptyline(self):
         "Method to return nothing if an empty line is entered"
         pass
