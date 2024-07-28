@@ -39,13 +39,13 @@ class HBNBCommand(Cmd):
             args[0] = args[1]
             args[1] = klass
         line = " ".join(args)
-        # If command doesn't exist to handle the command
-        if f"do_{args[0]}" not in HBNBCommand.__dict__:
-            super().default(line)
-            return
+        # If command now exists to handle the command
+        if f"do_{args[0]}" in HBNBCommand.__dict__:
+            # Run the class command
+            self.onecmd(line)
 
-        # Run the class command
-        self.onecmd(line)
+        else:
+            super().default(line)
 
     def do_create(self, klass):
         """Create a new instance of a give class
