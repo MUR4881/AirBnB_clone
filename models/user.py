@@ -10,9 +10,9 @@ from models.base_model import BaseModel
 
 
 class User(BaseModel):
-    '''User class that hold user attributes, like names
+    """User class that hold user attributes, like names
     and more.
-    '''
+    """
     email = ""  #: str: Email of course!
     password = ""  #: str: user's password
     first_name = ""  #: str: user's first_name
