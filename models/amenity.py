@@ -6,7 +6,7 @@
     define Amenity class
 """
 # Import dependencies
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
