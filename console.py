@@ -31,17 +31,19 @@ class HBNBCommand(Cmd):
         Args:
             line: The line for which command has not been implemented
         """
-        args = replace(line).split()
+        # converting <class_name>.cmd(args) -> cmd <class_name args>
+        args = replace(line)
         # swap first two: as in User.create as create User
-        klass = args[0]
-        args[0] = args[1]
-        args[1] = klass
-
+        if len(args) >= 2:  # Prevent Index Error
+            klass = args[0]
+            args[0] = args[1]
+            args[1] = klass
         line = " ".join(args)
         # If command doesn't exist to handle the command
         if f"do_{args[0]}" not in HBNBCommand.__dict__:
             super().default(line)
             return
+
         # Run the class command
         self.onecmd(line)
 
@@ -56,6 +58,10 @@ class HBNBCommand(Cmd):
         # create the instance, remember the storage automatically reload
         # Reload, as in read everything stored in the file
         # And reload as been called in __init__.py
+        args = replace(klass)  # attempting to clean and sepate args
+        if len(args):
+            klass = args[0]
+
         try:
             new_obj = eval(klass)()  #: eval convert the string to the class
         except SyntaxError:  # eval throws syntax error on empty string
@@ -101,29 +107,19 @@ class HBNBCommand(Cmd):
         Args:
             klass: The optional class Name
         """
-        klass = replace(klass)  # Removing unncessary chars
         str_list = []  # To store list of str
-        typ = None
-        length = len(klass)
-        # Prevent passing empty string to eval()
-        if length != 0:
-            try:  # Ensure class is defined
-                typ = type(eval(klass))  #: catching other type
-            except Exception:  # to prevent unneccessary transverse
-                print(Err2)
-                return  # preventing unneccessary transverse
-            finally:  # Survived eval for being a None class variable or int ?
-                # klass is defined in scope, but not a class?
-                if typ is not type and typ is not None:
-                    print(Err2)
-                    return
 
+        # Check for class existence
+        # Returned tuple of boolean, strippedklass, klass length below
+        exists, klass, length = class_exists(klass)
+        if not exists:  # klass exists?
+            return
         # made through as a defined class, or class not given
         for key, obj in storage.all().items():  # list of tuples:(key,obj)
             # Ensuring for empty string or fully defined class
             if (length == 0) or (klass in key.split(".")):
                 str_list.append(str(obj))
-
+        # Found Instances
         print(str_list)
 
     def do_update(self, args):
@@ -137,7 +133,7 @@ class HBNBCommand(Cmd):
         key_obj = get_object_by_id(args)  # tuple: of key_and obj
         # is the object None?
         if key_obj is not None:
-            args = replace(args).split()  # list: of cmdline args
+            args = replace(args)  # list: of cmdline args
             length = len(args)  # int: the number arguments
             if length < 3:
                 print("** attribute name missing **")
@@ -196,7 +192,8 @@ def replace(arg):
             character = " "  # Replacement
         reform_arg += character
 
-    return reform_arg.strip()  # removing spaces added to ends
+    reform_arg = reform_arg.strip()  # removing spaces added to ends
+    return reform_arg.split()
 
 
 def get_object_by_id(arg):
@@ -208,7 +205,7 @@ def get_object_by_id(arg):
 
     Return: Key with Reference/address to the object else None if not found
     """
-    ids = replace(arg).split()  #: list: contains class_name, UUID, or more
+    ids = replace(arg)  #: list: contains class_name, UUID, or more
     length = len(ids)  #: int: number of args
     if length == 0:
         print(Err1)
@@ -234,6 +231,34 @@ def get_object_by_id(arg):
                 else:  # Returning key, and reference to objects
                     return (key, found_object)
     return None  # Explicitly, for clarity sake
+
+
+def class_exists(klass):
+    """Checks whether a class exist (Not, local variable  or digit)
+
+    Args:
+        klass: class name (string)
+
+    Return: A tuple of boolean and a class name (stripped)
+            and klass length
+    """
+    klass = replace(klass)  # Removing unncessary chars and splitting
+    if (length := len(klass)):  # Got length of class!
+        klass = klass[0]  # ^ above
+    typ = None
+    # Prevent passing empty string to eval()
+    if length != 0:
+        try:  # Ensure class is defined
+            typ = type(eval(klass))  #: catching other type
+        except Exception:  # to prevent unneccessary transverse
+            print(Err2)
+            return (False, klass, length)  # prevent unneccessary transverse
+        finally:  # Survived eval for being a None class variable or int ?
+            # klass is defined in scope, but not a class?
+            if typ is not type and typ is not None:
+                print(Err2)
+                return (False, klass, length)
+    return (True, klass, length)  #: Implying class exit
 
 
 # ------- Error Messages ------------ #
