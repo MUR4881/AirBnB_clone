@@ -135,8 +135,23 @@ class HBNBCommand(Cmd):
         if key_obj is not None:
             args = replace(args)  # list: of cmdline args
             length = len(args)  # int: the number arguments
+            obj = key_obj[1]  # Object found with the id
             if length < 3:
                 print("** attribute name missing **")
+
+            elif args[2][0] == "{":  # checking for dict
+                try:
+                    dct = eval(args[2])
+                except Exception as error:
+                    print(f"[{error.__class__.__name__}]! Because: {error}")
+                else:
+                    try:
+                        obj.update(**dct)  # unpacking dict onto update method
+                    except Exception as err:
+                        print(f"[{err.__class__.__name__}]! Because : {err}")
+                    else:  # keep updates if not error, with all attr/val
+                        storage.save()
+
             elif length < 4:
                 print("** value missing **")
             else:  # attributes and values are available!
@@ -152,8 +167,7 @@ class HBNBCommand(Cmd):
                             value = float(value)  # float() can handle int str
                     # value casted or not, as long as attribute starts w alpa
                     # key_obj contains tuple of key and obj,! get_obj_by_id()?
-                    obj = key_obj[1]  # Object
-                    setattr(obj, attribute, value)  # setting attributes
+                    obj.update(attribute, value)  # setting attributes
                     storage.save()  # Saving changes to disk also
                 else:  # attribute doesn't start with alphabet
                     # which, causes the attribute to be in accessibe
@@ -194,12 +208,14 @@ class HBNBCommand(Cmd):
         print()
         return True
 
+
 # ----- Complementary/Supplementary Functions --------- #
 
 
 def replace(arg):
     """removes '.(),'
     by using space as the default separator
+    But, maintains a dict string.
 
     Args:
         arg: The passed arguments to be separated
@@ -207,10 +223,19 @@ def replace(arg):
     Return: A list of the splitted.
     """
     # Replaces Unnecessary characters with space
+    replaced_chars = ",()\"'."
+    # Making an exception for the update command
+    change = True  # Wether to change or not?
     reform_arg = ""
     for character in arg:
-        if character in ",()\"'.":
+        # Ensuring dict is not changed
+        if character == "{" or character == "}":  # Won't work 4 dict of dict
+            change = not change  # Toggling changing
+        if character in ",()\"'." and change:
             character = " "  # Replacement
+        # Removing spaces from {dict} to avoid splitting
+        if change is False and character == ' ':
+            character = ""  # Replacing space char with empty
         reform_arg += character
 
     reform_arg = reform_arg.strip()  # removing spaces added to ends

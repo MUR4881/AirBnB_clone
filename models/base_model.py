@@ -65,3 +65,16 @@ class BaseModel:
         new_dict["updated_at"] = self.updated_at.isoformat()
 
         return new_dict
+
+    def update(self, attribute=None, value=None, **kwargs):
+        """Updates instance with attributes, which are key in the dict
+        with the values of the keys in the dicts
+
+        Args:
+            kwargs: dict of attributes and values
+        """
+        if attribute and value:
+            setattr(self, attribute, value)
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
