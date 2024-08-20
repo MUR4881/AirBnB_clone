@@ -1,0 +1,12 @@
+/* Contain styling for the page footer */
+
+footer {
+	background-color: #00FF00;
+	        position: fixed;
+		  bottom: 0px;
+		 display: flex;
+	 justify-content: center;
+	     align-items: center;
+		  height: 60px;
+		   width: 100%;
+	   }
