@@ -305,6 +305,7 @@ def class_exists(klass):
                 print(Err2)
                 return (False, klass, length)
     return (True, klass, length)  #: Implying class exit
+# ^ return true when class length is 0 ?
 
 
 # ------- Error Messages ------------ #
