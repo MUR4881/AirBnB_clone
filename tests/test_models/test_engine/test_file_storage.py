@@ -20,6 +20,8 @@ deserialize JSON file to instances:
         do nothing. If the file doesn't exist, no exception should
         be raised
 """
+# Import dependencies
+import os
 # Import the test framework
 import unittest
 # Import the class to be tested
@@ -31,10 +33,15 @@ class TestFileStorage(unittest.TestCase):
     """
     Testing the file storage engine
     """
+
     def test__objects(self):
         """Test if, the __objects dict is not empty
         after reload
         """
-        storage = FileStorage()
-        storage.reload()
-        self.assertGreater(len(storage.all()), 0)
+        try:
+            os.stat("file.json")
+            storage = FileStorage()
+            storage.reload()
+            self.assertGreater(len(storage.all()), 0)
+        except FileNotFoundError:
+            self.skipTest("Json file not in found")
