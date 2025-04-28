@@ -45,3 +45,15 @@ class TestFileStorage(unittest.TestCase):
             self.assertGreater(len(storage.all()), 0)
         except FileNotFoundError:
             self.skipTest("Json file not in found")
+
+    def test_new(self):
+        """Testing the new() functionality of FileStorage
+        class
+        """
+        storage = FileStorage()
+        bm = BaseModel()
+        storage.new(bm)
+        bm.save()  #  storage.save() is called by this method
+        storage.reload()
+        self.assertTrue(f"{bm.__class__.__name__}.{bm.id}"
+                        in storage.all(), "Deserialization Failed")
