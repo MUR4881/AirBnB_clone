@@ -15,7 +15,8 @@ deserialize JSON file to instances:
         * all(self): returns the dictionary __objects
         * new(self, obj): sets in __objects the obj with
         key <obj class name>.id
-        * save(self): deserializes the JSON file to __objects
+        * save(self): serializes __objects to the JSON file(path:__file_path)
+        * reload(self): deserializes the JSON file to __objects
         (only if the JSON file (__file_path)exists; otherwise,
         do nothing. If the file doesn't exist, no exception should
         be raised
@@ -34,9 +35,33 @@ class TestFileStorage(unittest.TestCase):
     Testing the file storage engine
     """
 
-    def test__objects(self):
+    def test_reload(self):
+        """Testing the reload functionality serializes
+        correctly
+        """
+        storage = FileStorage()
+        storage.reload()
+        self.assertTrue(storage.all())  # confirm objects were reloaded
+
+    def test_all(self):
+        """Test the all functionality
+        """
+        storage = FileStorage()
+        self.assertTrue(storage.all())
+
+    def test_save(self):
+        """Test the save functionality
+        """
+        storage = FileStorage()
+        prev_len = len(storage.all())
+        bm = BaseModel()
+        bm.save()
+        new_len = len(storage.all())
+        self.assertEqual(new_len, prev_len + 1, msg="Object not saved")
+
+    def test__objects_not_empty(self):
         """Test if, the __objects dict is not empty
-        after reload
+        after reload, obviously a test for `reload`
         """
         try:
             os.stat("file.json")
@@ -53,7 +78,7 @@ class TestFileStorage(unittest.TestCase):
         storage = FileStorage()
         bm = BaseModel()
         storage.new(bm)
-        bm.save()  #  storage.save() is called by this method
+        bm.save()  # storage.save() is called by this method
         storage.reload()
         self.assertTrue(f"{bm.__class__.__name__}.{bm.id}"
                         in storage.all(), "Deserialization Failed")
