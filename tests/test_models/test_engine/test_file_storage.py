@@ -23,6 +23,7 @@ deserialize JSON file to instances:
 """
 # Import dependencies
 import os
+from sys import stderr
 # Import the test framework
 import unittest
 # Import the class to be tested
@@ -34,51 +35,75 @@ class TestFileStorage(unittest.TestCase):
     """
     Testing the file storage engine
     """
+    @classmethod
+    def setUpClass(cls):
+        """Create a storage object for tests
+        """
+        try:
+            os.stat("file.json")
+        except FileNotFoundError:
+            # self.skipTest("Json file not in found")
+            print("Json File Not Found\nCreating One", file=stderr)
+            for i in range(1, 1001):  # Creating objects if none exist before
+                bm = BaseModel()
+                bm.name = f"User:{i}"
+            bm.save()  # Save all objects, this save called FileStorage save
+        finally:
+            cls.storage = FileStorage()
+            cls.storage.reload()
+
+    def setUp(self):
+        """Create a model for each test
+        """
+        self.object = BaseModel()
 
     def test_reload(self):
         """Testing the reload functionality serializes
         correctly
         """
-        storage = FileStorage()
-        storage.reload()
-        self.assertTrue(storage.all())  # confirm objects were reloaded
+        self.storage.reload()
+        self.assertTrue(self.storage.all())  # confirm objects were reloaded
 
     def test_all(self):
         """Test the all functionality
         """
-        storage = FileStorage()
-        self.assertTrue(storage.all())
+        self.assertTrue(self.storage.all())
 
     def test_save(self):
         """Test the save functionality
         """
-        storage = FileStorage()
-        prev_len = len(storage.all())
+        prev_len = len(self.storage.all())
         bm = BaseModel()
         bm.save()
-        new_len = len(storage.all())
+        new_len = len(self.storage.all())
         self.assertEqual(new_len, prev_len + 1, msg="Object not saved")
 
     def test__objects_not_empty(self):
         """Test if, the __objects dict is not empty
         after reload, obviously a test for `reload`
         """
-        try:
-            os.stat("file.json")
-            storage = FileStorage()
-            storage.reload()
-            self.assertGreater(len(storage.all()), 0)
-        except FileNotFoundError:
-            self.skipTest("Json file not in found")
+        self.assertGreater(len(self.storage.all()), 0)
 
     def test_new(self):
         """Testing the new() functionality of FileStorage
         class
         """
-        storage = FileStorage()
-        bm = BaseModel()
-        storage.new(bm)
+        bm = self.object
+        # self.storage.new(bm) new is automatically invoked
         bm.save()  # storage.save() is called by this method
-        storage.reload()
+        # Testing the new functionality
+        self.storage.reload()
         self.assertTrue(f"{bm.__class__.__name__}.{bm.id}"
-                        in storage.all(), "Deserialization Failed")
+                        in self.storage.all(), "Deserialization Failed")
+
+    def test_new_int(self):
+        """Test the new functionality, with Integer object
+        """
+        with self.assertRaises(AttributeError):
+            self.storage.new(int(1234))
+
+    def test_new_str(self):
+        """Test the new functionality with string object
+        """
+        with self.assertRaises(AttributeError):
+            self.storage.new(str(1234))
