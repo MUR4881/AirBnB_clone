@@ -41,64 +41,68 @@ import datetime
 import uuid
 
 
+Model = BaseModel
 class TestBaseModel(unittest.TestCase):
     """Testing all the functionalities of the
     BaseModel class to be sure, they all work
     """
 
+
+    print(f"{BaseModel.__name__}")
     def test_attributes(self):
         '''Test that common attributes exits
         '''
-        bm = BaseModel()
+        test_model = Model()
         self.assertCountEqual(['id', 'created_at', 'updated_at'],
-                              bm.__dict__.keys())
+                              test_model.__dict__.keys())
 
     def test_to_dict(self):
         '''Test the to_dict functionality
         '''
         created_at = datetime.datetime.now().isoformat()
-        bm = BaseModel(id=uuid.uuid4(), created_at=created_at,
+        test_model = Model(id=uuid.uuid4(), created_at=created_at,
                        updated_at=created_at,
                        name="My First Model", my_number=89, age=11)
         self.assertCountEqual(['id', 'created_at', 'updated_at', '__class__',
                                'name', 'my_number', 'age'],
-                              bm.to_dict().keys())
+                              test_model.to_dict().keys())
 
     def test_attributes2(self):
         """Test attributes for
         """
-        bm = BaseModel()
-        self.assertEqual(bm.created_at.isoformat()[:-7],
+        test_model = Model()
+        self.assertEqual(test_model.created_at.isoformat()[:-7],
                          datetime.datetime.now().isoformat()[:-7])
 
     def test_timestamp(self):
         '''Testing that created_at is same as updated_at
         '''
-        bm = BaseModel()
-        self.assertEqual(bm.created_at, bm.updated_at, "Confirmed to be same")
+        test_model = Model()
+        self.assertEqual(test_model.created_at, test_model.updated_at,
+                         "Confirmed to be same")
 
     def test_save(self):
         '''Test the save functionality
         '''
-        bm = BaseModel()
-        bm.save()  # checking to see if saving, updates the updated_at
-        self.assertNotEqual(bm.created_at, bm.updated_at,
+        test_model = Model()
+        test_model.save()  # checking to see if saving, updates the updated_at
+        self.assertNotEqual(test_model.created_at, test_model.updated_at,
                             "Save does update created_at?")
 
     def test__str__(self):
         '''Testing the string representation of the object
         '''
-        bm = BaseModel()
-        self.assertEqual(f"[{bm.__class__.__name__}] ({bm.id}) {bm.__dict__}",
-                         bm.__str__())
+        test_model = Model()
+        self.assertEqual(f"[{test_model.__class__.__name__}] ({test_model.id}) {test_model.__dict__}",
+                         test_model.__str__())
 
     def test_update(self):
         '''Test update functionality of the BaseModel objects
         '''
-        bm = BaseModel()
-        bm.name = "Who"
-        bm.update('name', 'yes')
-        self.assertEqual(bm.name, 'yes')
+        test_model = Model()
+        test_model.name = "Who"
+        test_model.update('name', 'yes')
+        self.assertEqual(test_model.name, 'yes')
 
     def test_from_dict(self):
         """Test creating, the object from dictionary using
@@ -110,5 +114,5 @@ class TestBaseModel(unittest.TestCase):
                "created_at": datetime.datetime.now().isoformat(),
                "updated_at": datetime.datetime.now().isoformat(),
                "name": "Bool_shit", "__class__": "BaseModel"}
-        bm = BaseModel(**dct)
-        self.assertDictEqual(bm.to_dict(), dct)
+        test_model = Model(**dct)
+        self.assertDictEqual(test_model.to_dict(), dct)
