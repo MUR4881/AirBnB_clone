@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 """
-Implementation of test class for class Amenity.
+Implementation of test class for class Amenity By extending
+the TestBaseModel class, and adding more Amenity specific tests.
 
 The class Amenity:
     Amenity (models/amenity.py):
@@ -25,4 +26,12 @@ class TestAmenity(test_base_model.TestBaseModel):
         Importing from TestBaseModel, which include the basic test
         cases and also improving the Amenity test cases
     """
+
+    def test_public_var_type(self):
+        """
+            Test the public class attribute of the
+            Associated class
+            """
+        self.assertIsInstance(f"Amenity.__dict_.['name']", str)
+
 
