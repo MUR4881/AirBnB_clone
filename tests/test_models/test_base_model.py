@@ -42,13 +42,15 @@ import uuid
 
 
 Model = BaseModel
+
+
 class TestBaseModel(unittest.TestCase):
     """Testing all the functionalities of the
     BaseModel class to be sure, they all work
     """
 
-
     print(f"{BaseModel.__name__}")
+
     def test_attributes(self):
         '''Test that common attributes exits
         '''
@@ -61,8 +63,8 @@ class TestBaseModel(unittest.TestCase):
         '''
         created_at = datetime.datetime.now().isoformat()
         test_model = Model(id=uuid.uuid4(), created_at=created_at,
-                       updated_at=created_at,
-                       name="My First Model", my_number=89, age=11)
+                           updated_at=created_at,
+                           name="My First Model", my_number=89, age=11)
         self.assertCountEqual(['id', 'created_at', 'updated_at', '__class__',
                                'name', 'my_number', 'age'],
                               test_model.to_dict().keys())
@@ -93,7 +95,8 @@ class TestBaseModel(unittest.TestCase):
         '''Testing the string representation of the object
         '''
         test_model = Model()
-        self.assertEqual(f"[{test_model.__class__.__name__}] ({test_model.id}) {test_model.__dict__}",
+        self.assertEqual(f"[{test_model.__class__.__name__}] ({test_model.id})"
+                         f" {test_model.__dict__}",
                          test_model.__str__())
 
     def test_update(self):
