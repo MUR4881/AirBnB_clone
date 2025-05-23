@@ -16,6 +16,10 @@ The class City:
 from models.city import City
 from . import test_base_model
 
+test_base_model.__dict__["Model"] = City
+
 class TestCity(test_base_model.TestBaseModel):
     """
+    Class Which Implement test cases and
+    test suite for the class City
     """
