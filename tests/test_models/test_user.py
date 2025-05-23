@@ -21,4 +21,6 @@ from . import test_base_model
 
 class TestUser(test_base_model.TestBaseModel):
     """
+    Unit test class which implemebt test cases and
+    test suite for User class
     """
