@@ -19,6 +19,8 @@ The class User:
 from models.user import User
 from . import test_base_model
 
+test_base_model["Model"] = User
+
 class TestUser(test_base_model.TestBaseModel):
     """
     Unit test class which implemebt test cases and
