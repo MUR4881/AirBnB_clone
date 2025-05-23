@@ -30,7 +30,7 @@ class TestAmenity(test_base_model.TestBaseModel):
     def test_public_var_type(self):
         """
             Test the public class attribute of the
-            Associated class
+            Associated class(TestAmenity).
             """
         self.assertIsInstance(f"Amenity.__dict_.['name']", str)
 
