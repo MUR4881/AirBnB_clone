@@ -19,9 +19,9 @@ from tests.test_models import test_base_model
 # the Test Classes so the test can be performed on our desired classes
 
 test_base_model.__dict__["Model"] = Amenity
-
-
 # print(TestBaseModel.__dict__)
+
+
 class TestAmenity(test_base_model.TestBaseModel):
     """
         Importing from TestBaseModel, which include the basic test

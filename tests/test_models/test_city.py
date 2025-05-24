@@ -14,7 +14,7 @@ The class City:
 
 # Import Dependencies
 from models.city import City
-from . import test_base_model
+from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = City
 

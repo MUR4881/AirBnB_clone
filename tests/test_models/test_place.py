@@ -17,14 +17,14 @@ The class Place:
         price_by_night: integer - 0
         latitude: float - 0.0
         longitude: float - 0.0
-        amenity_ids: list of string - empty list: it will be
-        the list of Amenity.id later
+        amenity_ids: list of string - empty list:
+        it will be the list of Amenity.id later
 
 """
 
 # Import Dependencies
 from models.place import Place
-from . import test_base_model
+from tests.test_models import test_base_model
 
 test_base_model.Model = Place
 

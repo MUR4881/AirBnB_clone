@@ -13,7 +13,7 @@ The Class Review:
 
 # Import Dependencies
 from models.review import Review
-from . import test_base_model
+from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = Review
 
