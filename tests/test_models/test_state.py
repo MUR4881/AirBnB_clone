@@ -21,3 +21,9 @@ class TestState(test_base_model.TestBaseModel):
     Unit testing State Class by writtting unit
     test cases and test suite for each edge case
     """
+    def test_public_var_type(self):
+        """
+        Method that implement test suites
+        to ensure a consistent class attribute type
+        """
+        self.assertIsInstance(f"State.__dict__['name']", str)
