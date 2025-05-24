@@ -26,3 +26,12 @@ class TestUser(test_base_model.TestBaseModel):
     Unit test class which implemebt test cases and
     test suite for User class
     """
+    def test_public_var_type(self):
+        """
+        Method to implement test cases for
+        public class attributes
+        """
+        self.assertIsInstance(f"User.__dict__['email']", str)
+        self.assertIsInstance(f"User.__dict__['password']", str)
+        self.assertIsInstance(f"User.__dict__['first_name']", str)
+        self.assertIsInstance(f"User.__dict__['last_name']", str)

@@ -32,4 +32,21 @@ class TestPlace(test_base_model.TestBaseModel):
     Test Class Which implemnt test cases
     and test suite for the class Place
     """
+    def test_public_var_type(self):
+        """
+        Method to check and verify(test)
+        type of class attributes
+        """
+        self.assertIsInstance(f"Place.__dict__['city_id']", str)
+        self.assertIsInstance(f"Place.__dict__['user_id']", str)
+        self.assertIsInstance(f"Place.__dict__['name']", str)
+        self.assertIsInstance(f"Place.__dict__['description']", str)
+        print(type(f"Place.__dict__['number_rooms']"))
+        self.assertIsInstance(f"Place.__dict__['number_rooms']", int)
+        self.assertIsInstance(f"Place.__dict__['number_bathrooms']", int)
+        self.assertIsInstance(f"Place.__dict__['max_guest']", int)
+        self.assertIsInstance(f"Place.__dict__['price_by_night']", int)
+        self.assertIsInstance(f"Place.__dict__['latitude']", float)
+        self.assertIsInstance(f"Place.__dict__['longitude']", float)
+        self.assertIsInstance(f"Place.__dict__['amenity']", list)
 

@@ -49,7 +49,7 @@ class TestBaseModel(unittest.TestCase):
     BaseModel class to be sure, they all work
     """
 
-    print(f"{BaseModel.__name__}")
+    print(Model)
 
     def test_attributes(self):
         '''Test that common attributes exits
@@ -116,6 +116,6 @@ class TestBaseModel(unittest.TestCase):
         dct = {"id": str(uuid.uuid4()),
                "created_at": datetime.datetime.now().isoformat(),
                "updated_at": datetime.datetime.now().isoformat(),
-               "name": "Bool_shit", "__class__": "BaseModel"}
+               "name": "Bool_shit", "__class__": Model.__name__}
         test_model = Model(**dct)
         self.assertDictEqual(test_model.to_dict(), dct)
