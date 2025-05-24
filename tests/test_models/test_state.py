@@ -10,11 +10,12 @@ The State Class:
         name: string - empty string
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.state import State
 from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = State
+
 
 class TestState(test_base_model.TestBaseModel):
     """

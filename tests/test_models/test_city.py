@@ -12,11 +12,12 @@ The class City:
 
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.city import City
 from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = City
+
 
 class TestCity(test_base_model.TestBaseModel):
     """

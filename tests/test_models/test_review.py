@@ -11,11 +11,12 @@ The Class Review:
         text: string - empty string
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.review import Review
 from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = Review
+
 
 class TestReview(test_base_model.TestBaseModel):
     """

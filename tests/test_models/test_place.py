@@ -17,15 +17,17 @@ The class Place:
         price_by_night: integer - 0
         latitude: float - 0.0
         longitude: float - 0.0
-        amenity_ids: list of string - empty list: it will be the list of Amenity.id later
+        amenity_ids: list of string - empty list:
+        it will be the list of Amenity.id later
 
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.place import Place
 from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = Place
+
 
 class TestPlace(test_base_model.TestBaseModel):
     """
@@ -49,4 +51,3 @@ class TestPlace(test_base_model.TestBaseModel):
         self.assertIsInstance(f"Place.__dict__['latitude']", float)
         self.assertIsInstance(f"Place.__dict__['longitude']", float)
         self.assertIsInstance(f"Place.__dict__['amenity']", list)
-

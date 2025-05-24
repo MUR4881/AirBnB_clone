@@ -21,6 +21,7 @@ from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = User
 
+
 class TestUser(test_base_model.TestBaseModel):
     """
     Unit test class which implemebt test cases and
