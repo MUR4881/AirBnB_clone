@@ -11,11 +11,12 @@ The Class Review:
         text: string - empty string
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.review import Review
 from . import test_base_model
 
 test_base_model.__dict__["Model"] = Review
+
 
 class TestReview(test_base_model.TestBaseModel):
     """
@@ -26,6 +27,6 @@ class TestReview(test_base_model.TestBaseModel):
         """
         Method to unit test publc class attributes
         """
-        self.assertIsInstance(f"Review.__dict__['place_id']", str)
-        self.assertIsInstance(f"Review.__dict__['user_id']", str)
-        self.assertIsInstance(f"Review._-dict__['text']", str)
+        self.assertIsInstance(Review.place_id, str)
+        self.assertIsInstance(Review.user_id, str)
+        self.assertIsInstance(Review.text, str)

@@ -10,11 +10,12 @@ The State Class:
         name: string - empty string
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.state import State
 from . import test_base_model
 
 test_base_model.__dict__["Model"] = State
+
 
 class TestState(test_base_model.TestBaseModel):
     """
@@ -26,4 +27,4 @@ class TestState(test_base_model.TestBaseModel):
         Method that implement test suites
         to ensure a consistent class attribute type
         """
-        self.assertIsInstance(f"State.__dict__['name']", str)
+        self.assertIsInstance(State.name, str)

@@ -21,6 +21,7 @@ from . import test_base_model
 
 test_base_model.__dict__["Model"] = User
 
+
 class TestUser(test_base_model.TestBaseModel):
     """
     Unit test class which implemebt test cases and
@@ -31,7 +32,7 @@ class TestUser(test_base_model.TestBaseModel):
         Method to implement test cases for
         public class attributes
         """
-        self.assertIsInstance(f"User.__dict__['email']", str)
-        self.assertIsInstance(f"User.__dict__['password']", str)
-        self.assertIsInstance(f"User.__dict__['first_name']", str)
-        self.assertIsInstance(f"User.__dict__['last_name']", str)
+        self.assertIsInstance(User.email, str)
+        self.assertIsInstance(User.password, str)
+        self.assertIsInstance(User.first_name, str)
+        self.assertIsInstance(User.last_name, str)

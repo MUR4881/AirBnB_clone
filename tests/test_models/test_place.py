@@ -17,15 +17,17 @@ The class Place:
         price_by_night: integer - 0
         latitude: float - 0.0
         longitude: float - 0.0
-        amenity_ids: list of string - empty list: it will be the list of Amenity.id later
+        amenity_ids: list of string - empty list: it will be
+        the list of Amenity.id later
 
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.place import Place
 from . import test_base_model
 
-test_base_model.__dict__["Model"] = Place
+test_base_model.Model = Place
+
 
 class TestPlace(test_base_model.TestBaseModel):
     """
@@ -37,16 +39,14 @@ class TestPlace(test_base_model.TestBaseModel):
         Method to check and verify(test)
         type of class attributes
         """
-        self.assertIsInstance(f"Place.__dict__['city_id']", str)
-        self.assertIsInstance(f"Place.__dict__['user_id']", str)
-        self.assertIsInstance(f"Place.__dict__['name']", str)
-        self.assertIsInstance(f"Place.__dict__['description']", str)
-        print(type(f"Place.__dict__['number_rooms']"))
-        self.assertIsInstance(f"Place.__dict__['number_rooms']", int)
-        self.assertIsInstance(f"Place.__dict__['number_bathrooms']", int)
-        self.assertIsInstance(f"Place.__dict__['max_guest']", int)
-        self.assertIsInstance(f"Place.__dict__['price_by_night']", int)
-        self.assertIsInstance(f"Place.__dict__['latitude']", float)
-        self.assertIsInstance(f"Place.__dict__['longitude']", float)
-        self.assertIsInstance(f"Place.__dict__['amenity']", list)
-
+        self.assertIsInstance(Place.city_id, str)
+        self.assertIsInstance(Place.user_id, str)
+        self.assertIsInstance(Place.name, str)
+        self.assertIsInstance(Place.description, str)
+        self.assertIsInstance(Place.number_rooms, int)
+        self.assertIsInstance(Place.number_bathrooms, int)
+        self.assertIsInstance(Place.max_guest, int)
+        self.assertIsInstance(Place.price_by_night, int)
+        self.assertIsInstance(Place.latitude, float)
+        self.assertIsInstance(Place.longitude, float)
+        self.assertIsInstance(Place.amenity_ids, list)

@@ -12,11 +12,12 @@ The class City:
 
 """
 
-#Import Dependencies
+# Import Dependencies
 from models.city import City
 from . import test_base_model
 
 test_base_model.__dict__["Model"] = City
+
 
 class TestCity(test_base_model.TestBaseModel):
     """
@@ -28,5 +29,5 @@ class TestCity(test_base_model.TestBaseModel):
         The method to ensure the public class attribute
         has a consistent type
         """
-        self.assertIsInstance(f"City._-dict__['name']", str)
-        self.assertIsInstance(f"City.__dict__['state_id']", str)
+        self.assertIsInstance(City.name, str)
+        self.assertIsInstance(City.state_id, str)

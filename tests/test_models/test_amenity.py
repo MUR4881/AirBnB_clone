@@ -20,7 +20,8 @@ from tests.test_models import test_base_model
 
 test_base_model.__dict__["Model"] = Amenity
 
-#print(TestBaseModel.__dict__)
+
+# print(TestBaseModel.__dict__)
 class TestAmenity(test_base_model.TestBaseModel):
     """
         Importing from TestBaseModel, which include the basic test
@@ -32,6 +33,4 @@ class TestAmenity(test_base_model.TestBaseModel):
             Test the public class attribute of the
             Associated class(TestAmenity).
             """
-        self.assertIsInstance(f"Amenity.__dict_.['name']", str)
-
-
+        self.assertIsInstance(Amenity.name, str)
