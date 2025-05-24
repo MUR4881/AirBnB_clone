@@ -22,3 +22,10 @@ class TestReview(test_base_model.TestBaseModel):
     Unit test the Review Class by implementing
     test cases and test suite
     """
+    def test_public_var_type(self):
+        """
+        Method to unit test publc class attributes
+        """
+        self.assertIsInstance(f"Review.__dict__['place_id']", str)
+        self.assertIsInstance(f"Review.__dict__['user_id']", str)
+        self.assertIsInstance(f"Review._-dict__['text']", str)
