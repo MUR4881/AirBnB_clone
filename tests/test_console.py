@@ -108,4 +108,34 @@
         * A string argument with a space must be between double quote
         * The error management starts from the first argument to the last one
 
+    ** Update your command interpreter (console.py) to allow those actions:
+    show, create, destroy, update and all with all classes created previously.
+
+    ** Update your command interpreter (console.py) to retrieve
+    all instances of a class by using: <class name>.all().
+
+    ** Update your command interpreter (console.py) to retrieve an
+    instance based on its ID: <class name>.show(<id>).
+
+    Errors management must be the same as previously.
+
+    ** Update your command interpreter (console.py) to destroy an
+    instance based on his ID: <class name>.destroy(<id>).
+
+    Errors management must be the same as previously.
+
+    ** Update your command interpreter (console.py) to update an instance
+    based on his ID: <class name>.
+    update(<id>, <attribute name>, <attribute value>).
+
+    Errors management must be the same as previously.
+
+    ** Update your command interpreter (console.py) to update an instance
+    based on his ID with a dictionary: <class name>.
+    update(<id>, <dictionary representation>).
+
+    Errors management must be the same as previously.
+
+Enjoy your first console!
+
 """
