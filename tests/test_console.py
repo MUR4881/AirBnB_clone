@@ -188,7 +188,7 @@ class TestConsole(TestCaseEscape):
                 line.append(output.getvalue()[:-1])
                 setattr(TestCaseEscape, f"test_{line_count}",
                         lambda self: eval(f"self.{TestConsole.line[0]}")\
-                        (TestConsole.line[2], TestConsole.line[3],
+                        (TestConsole.line[3], TestConsole.line[2],
                         f"@ line: {TestConsole.line_count}"
                         ))
                 line_count += 1  #: keeping count of current line in file
