@@ -1,3 +1,7 @@
+from unittest import TestCase
+from unittest.mock import patch
+from console import HBNBCommand
+from io import StringIO
 # -*- encoding: utf-8 -*-
 
 """ Implementing test for the console:
@@ -139,3 +143,52 @@
 Enjoy your first console!
 
 """
+
+# file with the foramt assertions#testinput#expected_output
+__File__ = "filetest.ftst"
+
+# def __init__(self, methodName='test_me'):
+#    ''' Dynamcally generating test units from
+#    a file
+#    '''
+#    print("wow")
+
+class TestCaseEscape(TestCase):
+    '''Preventing, adding the test_ methods to the
+    the main TestCase class, which causes the tests
+    to be ran for all other TestClasses inheriting
+    from TestCase
+    '''
+
+    # preventing execution of test_methods that would be set
+    # to this class
+    @classmethod
+    def setUpClass(cls):
+        cls.skipTest(True,"Skipping, this testClass is only a sacrifice")
+
+
+class TestConsole(TestCaseEscape):
+    '''Testing the  Console
+    '''
+
+    @classmethod
+    def setUpClass(cls):
+        '''Overriding the previous SetUp from the previous class
+        '''
+        pass
+
+
+    with patch("sys.stdout", new=StringIO()) as output:
+        with open(__File__, "r") as file:
+            line_count = 0  #: Keeping track of line number for file
+            for line in file.readlines():
+                line = line[:-1]  #: Removing the newline character
+                line = line.split("#")
+                HBNBCommand().onecmd(line[1])
+                line.append(output.getvalue()[:-1])
+                setattr(TestCaseEscape, f"test_{line_count}",
+                        lambda self: eval(f"self.{TestConsole.line[0]}")\
+                        (TestConsole.line[2], TestConsole.line[3],
+                        f"@ line: {TestConsole.line_count}"
+                        ))
+                line_count += 1  #: keeping count of current line in file
