@@ -9,6 +9,8 @@ from io import StringIO
     destroying objects, which is used for development
     and for the backend management of the Airbnb clone project
 
+    # The TestConsole, side  loads tests during instiation!
+
     Functionalities/Commands to test for:
     * ```quit``` and EOF to the exit the program
     * ```help``` (this action is provided by default by cmd but you
@@ -147,11 +149,29 @@ Enjoy your first console!
 # file with the foramt assertions#testinput#expected_output
 __File__ = "filetest.ftst"
 
-# def __init__(self, methodName='test_me'):
-#    ''' Dynamcally generating test units from
-#    a file
-#    '''
-#    print("wow")
+
+def createTest(self):
+    '''Executes an assertion, each time it is called, by taking
+    advantage of eval and the class attributes (`lists` of lists/lines
+    and line_count that has been set to zero, in the class)
+    '''
+
+    line = self.__class__.line_count  #: just to keep the lines below shorter
+
+    # Ensuring incrementation, which might not happen due to of assertion error
+    # thereby putting the incrementation before the assertion
+    self.__class__.line_count += 1  #: coincidentally biasing for the index 0
+
+    # |----- An example of one of the lists in the list self.lines
+    # |      That was generated in the test class from the test file
+    # V
+    # ['assertGreater', 'count Place', 52, <console output for count place>]
+    # line + 1 represents the actual line in the file which is index + 1
+    eval(f"self.{self.lines[line][0]}")(self.lines[line][3],
+                                        self.lines[line][2],
+                                        f"@ line: {line+1}"
+                                        )
+
 
 class TestCaseEscape(TestCase):
     '''Preventing, adding the test_ methods to the
@@ -164,11 +184,43 @@ class TestCaseEscape(TestCase):
     # to this class
     @classmethod
     def setUpClass(cls):
-        cls.skipTest(True,"Skipping, this testClass is only a sacrifice")
+        cls.skipTest(True, "Skipping, this testClass is only a sacrifice")
 
 
 class TestConsole(TestCaseEscape):
     '''Testing the  Console
+    Algorithm:
+        1: Setup interception for any output(from the console) to stdout
+        2: Open & read a line from the testfile (.ftst):
+            assertion_Type#console command#expected/compared output
+        3: Refine and split the line into columns
+            e.g ['assertRegex', 'create Place', '[0-9A-Z]*']
+        4: Execute the 2nd column index 1, with the cmd
+            HBNBCommand().onecmd(line[1])
+        5: Intercept, clean, extract the most recent output from the console
+            out = output.getValue().strip("\n").split("\n")[-1]
+        6: Append the console output to the list/line (not lines!)
+            line.append(out)
+        7:  Convert integer strings to integer where and when necessery
+                if line[0] in ['assertLess', 'assertGreater', 'assertEqual']:
+                    line[3] = int(line[3])  #: The console output
+                    line[2] = int(line[2])  #: The expected/toBeCompared output
+
+        8: Check if the Current line references any of the prevs cmd outputs
+        then put it in place.
+            it references by putting -n in the third column - the place meant
+            for the expected/toBeCompared output. where n represents the index
+            from the last e.g -1 -> present, -2 -> prev, -3 ->  prev prev
+            if line[2] > 0:
+                line[2] = lines[line[2]][2]
+
+        9: Append the new line/list to the overall record of lines
+                lines.append(line)
+        10: Now set a "test_n" attribute to a lamda function that calls
+        createTests
+                Go find out more about createTest in the test function
+        11: Increment the line_count
+
     '''
 
     @classmethod
@@ -177,18 +229,58 @@ class TestConsole(TestCaseEscape):
         '''
         pass
 
-
     with patch("sys.stdout", new=StringIO()) as output:
         with open(__File__, "r") as file:
             line_count = 0  #: Keeping track of line number for file
+            lines = []  #: To store the refined and grouped lines of the file
+
+            #: Generating tests begin here
+            #  Read line from file
             for line in file.readlines():
-                line = line[:-1]  #: Removing the newline character
+                #: Removing the newline character
+                line = line[:-1]
+                #: Separate Columns in the line
                 line = line.split("#")
+                #: Execute the second column with the console/cmd
                 HBNBCommand().onecmd(line[1])
-                line.append(output.getvalue()[:-1])
-                setattr(TestCaseEscape, f"test_{line_count}",
-                        lambda self: eval(f"self.{TestConsole.line[0]}")\
-                        (TestConsole.line[3], TestConsole.line[2],
-                        f"@ line: {TestConsole.line_count}"
-                        ))
+                #: Clean the console output(s) & split them. but why?
+                #  Ans: Well, that was one of the bugs, everytime we
+                #  try getting the console output, this method {getvalue()}
+                #  returns all the previous output from the console to.
+                #  therefore we split and take the last of the list which
+                #  represent the present output of the console.
+                out = output.getvalue().strip("\n").split("\n")
+                # append the console output to the line -> the list of lists
+                # that contains all the rows and columns from the testfile
+                line.append(out[-1])
+
+                #  now convert to integer where necessary and if necessary
+                if line[0] in ['assertLess', 'assertGreater', 'assertEqual']:
+                    line[3] = int(line[3])
+                    line[2] = int(line[2])
+
+                #  check if the current, requires any of the previous
+                #  console output to run, which is indicated with negative
+                #  integer @ the last column meant for the expected output
+                if isinstance(line[2], int) and line[2] < 0:
+                    #  summary: indexing the lines with the specified index
+                    #  in the 3rd column of the present line, then indexing
+                    # the 4th column, for the console output of that line.
+                    line[2] = lines[line[2]][3]
+                # Add the newly purified and cleaned line to the
+                # list of lists/lines
+                lines.append(line)
+                # Now set an attribute(a method) called test_n where
+                # n is the line number in the test file, and set it to a lambda
+                # function that call the function `createTest`, that reffrences
+                # the attributes (e.g lists, line_count) and makes an assertion
+                # taking advantage of eval
+                setattr(TestCaseEscape, f"test_{line_count+1}",
+                        lambda self: createTest(self))
+                # increment line count, so test_n  name is always different.
                 line_count += 1  #: keeping count of current line in file
+
+    # Resetting the line_count attribute list index to zero, so 'test_n' calls
+    # can index with it as a class attr from zero of the list of lists, whose
+    # length it represents.
+    line_count = 0
