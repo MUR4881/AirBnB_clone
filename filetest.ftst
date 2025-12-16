@@ -1,6 +1,15 @@
 assertRegex#create Place#[0-z]*
 assertAlmostEqual#create#** class name missing **
 assertAlmostEqual#create model#** class doesn't exist **
+assertAlmostEqual#show#** class name missing **
+assertAlmostEqual#show MyModel#** class doesn't exist **
+assertAlmostEqual#show BaseModel#** instance id missing **
+assertAlmostEqual#show BaseModel 121212#** no instance found **
+assertAlmostEqual#destroy#** class name missing **
+assertAlmostEqual#destroy MyModel#** class doesn't exist **
+assertAlmostEqual#destroy BaseModel#** instance id missing **
+assertAlmostEqual#destroy BaseModel 121212#** no instance found **
+assertAlmostEqual#all MyModel#** class doesn't exist **
 assertRegex#count Place#[0-9]+
 assertGreater#count Place#100
 assertEqual#count Place#57
