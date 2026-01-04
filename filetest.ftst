@@ -1,6 +1,7 @@
 assertRegex#create Place#[0-z]*
 assertAlmostEqual#create#** class name missing **
 assertAlmostEqual#create model#** class doesn't exist **
+assertAlmostEqual#show User 1c5369c5-3ce1-4808-9d2a-c07d4f92f9fb#[0-9a-z]+
 assertAlmostEqual#show#** class name missing **
 assertAlmostEqual#show MyModel#** class doesn't exist **
 assertAlmostEqual#show BaseModel#** instance id missing **
