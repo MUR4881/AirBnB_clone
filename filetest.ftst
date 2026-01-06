@@ -7,6 +7,7 @@ assertAlmostEqual#show MyModel#** class doesn't exist **
 assertAlmostEqual#show BaseModel#** instance id missing **
 assertAlmostEqual#show BaseModel 121212#** no instance found **
 assertRegex#destroy Place 500efe74-6a1d-4b5c-8be8-3ba2e7f7e880#\S
+assertAlmostEqual#show Place 500efe74-6a1d-4b5c-8be8-3ba2e7f7e880#** no instance found **
 assertAlmostEqual#destroy#** class name missing **
 assertAlmostEqual#destroy MyModel#** class doesn't exist **
 assertAlmostEqual#destroy BaseModel#** instance id missing **
