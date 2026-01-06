@@ -14,6 +14,7 @@ assertAlmostEqual#destroy BaseModel#** instance id missing **
 assertAlmostEqual#destroy BaseModel 121212#** no instance found **
 assertAlmostEqual#all MyModel#** class doesn't exist **
 assertAlmostEqual#update#** class name missing **
+assertAlmostEqual#update MyModel#** class doesn't exist **
 assertRegex#count Place#[0-9]+
 assertGreater#count Place#100
 assertEqual#count Place#57
